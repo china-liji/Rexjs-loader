@@ -1,0 +1,27 @@
+{
+	"name": "rexjs-loader",
+	"version": "1.0.0",
+	"description": "Rexjs-loader 供引用于 webpack.config.json 中",
+	"main": "rex-api.min.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/china-liji/Rexjs-loader"
+	},
+	"keywords": [
+		"rex",
+		"es6",
+		"compiler",
+		"javascript",
+		"js",
+		"编译"
+	],
+	"license": "MIT",
+	"homepage": "http://rexjs.org",
+	"author": {
+		"name": "李骥",
+		"email": "hello_zaizi@163.com"
+	},
+	"dependencies": {
+		"rexjs-api": "^1.3.3"
+	}
+}
