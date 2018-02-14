@@ -1,16 +1,16 @@
 module.exports = {
-	"entry": [
+	entry: [
 		"./test/a.js"
 	],
-	"output": {
-		"path": __dirname,
-		"filename": "a.min.js"
+	output: {
+		path: __dirname,
+		filename: "a.min.js"
 	},
-	"module": {
-		"loaders": [
+	module: {
+		loaders: [
 			{
-				"test": /\.js?$/,
-				"loader": "./index.js"
+				test: /\.js?$/,
+				loader: "./index.js"
 			}
 		]
 	}

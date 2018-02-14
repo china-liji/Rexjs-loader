@@ -1,10 +1,10 @@
 {
 	"name": "rexjs-loader",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Rexjs-loader - 是 webpack 利用 Rexjs 打包 es6 语法时，所依赖的 loader",
 	"main": "./index.js",
 	"scripts": {
-		"test": "webpack --config ./test/webpack.config.js"
+		"debug": "webpack --config ./test/webpack.config.js"
 	},
 	"repository": {
 		"type": "git",
