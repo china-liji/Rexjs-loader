@@ -21,10 +21,6 @@ this.Loader = function(File, parser, first){
 				new File(null, source)
 			);
 
-			console.log(123)
-
-			debugger
-
 			result += parser.build();
 			this.result = result;
 		};
