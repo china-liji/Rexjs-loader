@@ -1,8 +1,8 @@
 {
 	"name": "rexjs-loader",
 	"version": "1.0.0",
-	"description": "Rexjs-loader 供引用于 webpack.config.json 中",
-	"main": "rex-api.min.js",
+	"description": "Rexjs-loader - 是 webpack 利用 Rexjs 打包 es6 语法时，所依赖的 loader",
+	"main": "./index.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/china-liji/Rexjs-loader"
