@@ -10,7 +10,10 @@ module.exports = {
 		loaders: [
 			{
 				test: /\.js?$/,
-				loader: "./index.js"
+				loader: "./index.js",
+				options: {
+					root: __dirname
+				}
 			}
 		]
 	}

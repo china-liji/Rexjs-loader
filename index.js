@@ -1,8 +1,8 @@
-new function(Rexjs, fs){
+new function(Loader, Rexjs, fs, path, getOptions){
 
-this.Loader = function(File, parser, first){
+this.Loader = Loader =function(File, parser, first){
 	return class Loader {
-		constructor(source){
+		constructor(source, resourcePath){
 			var result = "";
 
 			if(first){
@@ -18,7 +18,7 @@ this.Loader = function(File, parser, first){
 
 			parser.parse(
 				// 初始化文件
-				new File(null, source)
+				new File(resourcePath, source)
 			);
 
 			result += parser.build();
@@ -33,13 +33,27 @@ this.Loader = function(File, parser, first){
 	true
 );
 
-module.exports = (source) => {
-	return new this.Loader(source).result;
+module.exports = function(source, a, b){
+	var root = (getOptions(this) || {}).root;
+
+	return (
+		new Loader(
+			source,
+			path.relative(root || "", this.resourcePath)
+		)
+		.result
+	);
 };
 
 }(
+	// Loader
+	null,
 	// Rexjs
 	require("rexjs-api"),
 	// fs
-	require("fs")
+	require("fs"),
+	// path
+	require("path"),
+	// getOptions
+	require("loader-utils").getOptions
 );
