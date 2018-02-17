@@ -3,10 +3,10 @@ new function(Loader, Rexjs, fs, path, getOptions){
 this.Loader = Loader = function(File, parser, first){
 	return class Loader {
 		constructor(source, webpack){
-			var result = "", options = getOptions(webpack) || {}, unrex = options.unrex;
+			var result = "", options = getOptions(webpack) || {}, unhelper = options.unhelper;
 
 			// 如果不需要附带 rex-browser-helper.min.js 文件
-			if(unrex){
+			if(unhelper){
 				first = false;
 			}
 
@@ -27,7 +27,7 @@ this.Loader = Loader = function(File, parser, first){
 			parser.parse(
 				// 初始化文件
 				new File(
-					unrex ? null : path.relative(options.root || "", webpack.resourcePath),
+					unhelper ? null : path.relative(options.root || "", webpack.resourcePath),
 					source
 				)
 			);
