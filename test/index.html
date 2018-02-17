@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<body>
+	<div>hello world</div>
+
+	<script src="./a.min.js"></script>
+
+	<script>
+		try {
+			if(Rexjs.Module.defaultOf(
+				"./a.js"
+			)() !== 999){
+				document.write("a.min.js error")
+			};
+
+			var request = new XMLHttpRequest(), unrexFile = "./unrex.a.min.js";
+
+			request.open("get", unrexFile, false);
+
+			request.send();
+
+			new Rexjs.Module(
+				unrexFile,
+				eval.bind(this, request.responseText)
+			);
+
+			if(Rexjs.Module.defaultOf(
+				unrexFile
+			)() !== 999){
+				document.write(unrexFile + " error")
+			};
+		}
+		catch(e){
+			document.write("catch error: " + e);
+		}
+	</script>
+</body>
+</html>

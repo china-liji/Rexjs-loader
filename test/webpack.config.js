@@ -1,10 +1,12 @@
+let unrex = process.argv.indexOf("unrex") > -1;
+
 module.exports = {
 	entry: [
 		"./test/a.js"
 	],
 	output: {
 		path: __dirname,
-		filename: "a.min.js"
+		filename: (unrex ? "unrex." : "") + "a.min.js"
 	},
 	module: {
 		loaders: [
@@ -12,7 +14,8 @@ module.exports = {
 				test: /\.js?$/,
 				loader: "./index.js",
 				options: {
-					root: __dirname
+					root: __dirname,
+					unrex
 				}
 			}
 		]

@@ -1,3 +1,5 @@
-import "./b.js";
+// import "./b.js";
 
-class a {}
+export default function(){
+	return 999;
+};
