@@ -6,7 +6,7 @@ module.exports = {
 	],
 	output: {
 		path: __dirname,
-		filename: (unrex ? "unrex." : "") + "a.min.js"
+		filename: (unrex ? "unrex-" : "") + "a.min.js"
 	},
 	module: {
 		loaders: [
