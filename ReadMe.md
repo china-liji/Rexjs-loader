@@ -1,23 +1,27 @@
 ### Rexjs-loader - 是 webpack 利用 Rexjs 打包 es6 语法时，所依赖的 loader。
 ------
-#### 当前仅是测试版，功能尚未完善
-------
 #### 快速使用：
 于 `webpack.config.js` 中的使用示例：
 ``` js
 module.exports = {
-	"entry": [
+	entry: [
 		"./a.js"
 	],
-	"output": {
-		"path": __dirname,
-		"filename": "a.min.js"
+	output: {
+		path: __dirname,
+		filename: "a.min.js"
 	},
-	"module": {
-		"loaders": [
+	module: {
+		loaders: [
 			{
-				"test": /\.js?$/,
-				"loader": "rexjs-loader"
+				test: /\.js?$/,
+				loader: "rexjs-loader",
+				options: {
+					// 可指定模块的根目录
+					root: __dirname,
+					// 是否不需要合并 rex-browser-helper.min.js 文件
+					unhelper: false
+				}
 			}
 		]
 	}
