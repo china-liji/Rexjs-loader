@@ -1,5 +1,23 @@
 ### Rexjs-loader - 是 webpack 利用 Rexjs 打包 es6 语法时，所依赖的 loader。
+
 ------
+
+#### 安装、下载
+* npm
+```
+npm install rexjs-loader
+```
+
+* Git
+```
+git clone https://github.com/china-liji/Rexjs-loader.git
+```
+
+* Git 仓库
+[https://github.com/china-liji/Rexjs-loader](https://github.com/china-liji/Rexjs-loader)
+
+------
+
 #### 快速使用：
 于 `webpack.config.js` 中的使用示例：
 ``` js
