@@ -2,6 +2,7 @@
 <html>
 <body>
 	<div>hello world</div>
+	<iframe src="./unhelper.html"></iframe>
 
 	<script src="./a.min.js"></script>
 
@@ -13,22 +14,22 @@
 				document.write("a.min.js error")
 			};
 
-			var request = new XMLHttpRequest(), unrexFile = "./a-unhelper.min.js";
+			// var request = new XMLHttpRequest(), unrexFile = "./a-unhelper.min.js";
 
-			request.open("get", unrexFile, false);
+			// request.open("get", unrexFile, false);
 
-			request.send();
+			// request.send();
 
-			new Rexjs.Module(
-				unrexFile,
-				eval.bind(this, request.responseText)
-			);
+			// new Rexjs.Module(
+			// 	unrexFile,
+			// 	eval.bind(this, request.responseText)
+			// );
 
-			if(Rexjs.Module.defaultOf(
-				unrexFile
-			)() !== 999){
-				document.write(unrexFile + " error")
-			};
+			// if(Rexjs.Module.defaultOf(
+			// 	unrexFile
+			// )() !== 999){
+			// 	document.write(unrexFile + " error")
+			// };
 		}
 		catch(e){
 			document.write("catch error: " + e);

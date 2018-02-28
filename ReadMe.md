@@ -22,7 +22,7 @@ module.exports = {
 					/*
 					 * 是否不需要合并 rex-browser-helper.min.js 文件，
 					 * 一般使用于 rexjs 解析 es6 的环境中，
-					 * 因为 rexjs 已经包括了 rex-browser-helper.min.js 文件。
+					 * 因为 rex.min.js 已经包括了 rex-browser-helper.min.js 文件。
 					 */
 					unhelper: false
 				}

@@ -27,6 +27,11 @@ this.ParserConfig = function(Buffer, ready){
 
 this.Loader = Loader = function(ParserConfig, url, first){
 	return class Loader {
+		/**
+		 * Rexjs 于 webpack 中使用的加载器
+		 * @param {String} source - 源码字符串
+		 * @param {Webpack} webpack - webpack 对象
+		 */
 		constructor(source, webpack){
 			var resultList = [], resourcePath = webpack.resourcePath, { root, unhelper } = getOptions(webpack) || {};
 
@@ -35,10 +40,12 @@ this.Loader = Loader = function(ParserConfig, url, first){
 				first = false;
 			}
 
+			// 解析文件
 			Loader.parse(resultList, resourcePath, source, root, unhelper)
 
 			// 如果是首次加载模块
 			if(first){
+				// 添加 rex-browser-helper.min.js 文件
 				resultList.unshift(
 					fs.readFileSync(
 						require.resolve("rexjs-api/rex-browser-helper.min.js"),
@@ -49,63 +56,59 @@ this.Loader = Loader = function(ParserConfig, url, first){
 				first = false;
 			}
 
+			// 设置结果
 			this.result = resultList.join("\n");
 		};
 
+		/**
+		 * 解析源码
+		 * @param {Array} resultList - 结果收集列表
+		 * @param {String} resourcePath - 源码文件路径
+		 * @param {String} source - 源码字符串
+		 * @param {String} root - 根目录
+		 * @param {Boolean} unhelper - 是否不需要合并 rex-browser-helper.min.js 文件
+		 */
 		static parse(resultList, resourcePath, source, root, unhelper){
 			var parser = new ECMAScriptParser();
 
+			// 如果不是 js 文件
 			if(path.parse(resourcePath).ext !== ".js"){
+				// 添加模块初始化代码
 				resultList.push(
 					`new Rexjs.Module("${path.relative(root || "", resourcePath)}","${source.split('"').join('\\"').split("\n").join("\\n")}");`
 				);
 				return;
 			}
 
-			switch(path.parse(resourcePath).ext){
-				case ".js":
-					break;
-
-				// 如果是 css
-				case ".css":
-					// 设置模块解析结果
-					result = new CSSCompiler(content, name.href);
-					// 获取依赖
-					deps = result.imports;
-					break;
-				
-				// 如果是 json
-				case ".json":
-					// 设置模块解析结果
-					result = parse(content);
-					break;
-			}
-
-			new ParserConfig();
+			// new ParserConfig();
 
 			// 解析文件
 			parser.parse(
 				// 初始化文件
 				new File(
-					unhelper ? null : path.relative(root || "", resourcePath),
+					unhelper ? "" : path.relative(root || "", resourcePath),
 					source
 				)
 			);
 
+			// 遍历依赖
 			parser.deps.forEach((dep) => {
 				var rpath = url.resolve(resourcePath, dep);
 
+				// 添加依赖解析结果
 				resultList.push(
+					// 解析依赖
 					this.parse(
 						resultList,
 						rpath,
 						fs.readFileSync(rpath, "utf8"),
 						root,
-						unhelper
+						false
 					)
 				);
 			});
 
+			// 添加编译结果
 			resultList.push(
 				parser.build()
 			);
