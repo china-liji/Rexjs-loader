@@ -1,13 +1,13 @@
 {
 	"name": "rexjs-loader",
-	"version": "1.1.8",
+	"version": "1.1.9",
 	"description": "Rexjs-loader - 是 webpack 利用 Rexjs 打包 es6 语法时，所依赖的 loader",
 	"main": "./index.js",
 	"scripts": {
 		"prepublish": "npm run test",
-		"debug": "webpack --config ./test/webpack.config.js",
+		"debug": "node ./node/debug.js",
 		"pretest": "npm run debug",
-		"test": "webpack --config ./test/webpack.config.js --env unhelper",
+		"test": "node ./node/debug.js --unhelper",
 		"start": "node node/server.js",
 		"filecopy": "node node/filecopy.js"
 	},
@@ -31,9 +31,10 @@
 	},
 	"dependencies": {
 		"colors": "^1.1.2",
-		"loader-utils": "^1.1.0",
-		"rexjs-api": "^1.5.4",
+		"rexjs-api": "^1.6.13",
 		"rexjs-filecopy": "^1.0.2",
-		"rexjs-simple-server": "^1.0.2"
+		"rexjs-simple-server": "^1.0.2",
+		"webpack": "^4.0.1",
+		"webpack-cli": "^2.0.10"
 	}
 }

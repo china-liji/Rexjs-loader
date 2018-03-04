@@ -8,7 +8,7 @@
 
 	<script>
 		window.onload = function(){
-			Rexjs.Module.cache[new Rexjs.ModuleName("./a-unhelper.min.js").href].listen(function(progress){
+			Rexjs.Module.cache[new Rexjs.ModuleReady.current.parseName("./a-unhelper.min.js").href].listen(function(progress){
 				if(progress !== 1){
 					return;
 				}

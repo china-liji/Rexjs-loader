@@ -1,4 +1,4 @@
-new function(Loader, { File, ECMAScriptParser, Base64 }, fs, path, colors, getOptions){
+new function(Loader, { File, ECMAScriptParser, Base64, URL, MODULE_CODE_STRING }, fs, path, colors){
 
 this.ParserConfig = function(Buffer, ready){
 	return class ParserConfig {
@@ -30,10 +30,10 @@ this.Loader = Loader = function(ParserConfig, url, first){
 		/**
 		 * Rexjs 于 webpack 中使用的加载器
 		 * @param {String} source - 源码字符串
-		 * @param {Webpack} webpack - webpack 对象
+		 * @param {WebpackLoader} webpackLoader - webpack loader 对象
 		 */
-		constructor(source, webpack){
-			var resultList = [], resourcePath = webpack.resourcePath, { root, unhelper } = getOptions(webpack) || {};
+		constructor(source, webpackLoader){
+			var resultList = [], resourcePath = webpackLoader.resourcePath, { root, unhelper } = webpackLoader.query || {};
 
 			// 如果不需要附带 rex-browser-helper.min.js 文件
 			if(unhelper){
@@ -48,8 +48,13 @@ this.Loader = Loader = function(ParserConfig, url, first){
 				// 添加 rex-browser-helper.min.js 文件
 				resultList.unshift(
 					fs.readFileSync(
-						require.resolve("rexjs-api/rex-browser-helper.min.js"),
+						require.resolve("rexjs-api/dist/rex-browser-helper.bundle.js"),
 						"utf8"
+					)
+					// 替换 module.exports 部分，防止 webpack 打包增加 module 模块
+					.replace(
+						MODULE_CODE_STRING,
+						"({})"
 					)
 				);
 
@@ -75,7 +80,9 @@ this.Loader = Loader = function(ParserConfig, url, first){
 			if(path.parse(resourcePath).ext !== ".js"){
 				// 添加模块初始化代码
 				resultList.push(
-					`new Rexjs.Module("${path.relative(root || "", resourcePath)}","${source.split('"').join('\\"').split("\n").join("\\n")}");`
+					`new Rexjs.Module("${
+						path.relative(root || "", resourcePath)}","${source.replace(/("|\n|\\)/g, "\\$1")
+					}");`
 				);
 				return;
 			}
@@ -86,7 +93,9 @@ this.Loader = Loader = function(ParserConfig, url, first){
 			parser.parse(
 				// 初始化文件
 				new File(
-					unhelper ? "" : path.relative(root || "", resourcePath),
+					new URL(
+						path.relative(root || "", resourcePath)
+					),
 					source
 				)
 			);
@@ -110,7 +119,7 @@ this.Loader = Loader = function(ParserConfig, url, first){
 
 			// 添加编译结果
 			resultList.push(
-				parser.build()
+				parser.build(null, unhelper)
 			);
 		};
 	};
@@ -131,7 +140,7 @@ module.exports = function(source){
 	catch(e){
 		console.log(
 			colors.red("Rexjs 解析发现错误：") +
-			colors.yellow(e)
+			colors.yellow(e.stack || e)
 		);
 
 		this.async();
@@ -148,7 +157,5 @@ module.exports = function(source){
 	// path
 	require("path"),
 	// colors
-	require("colors/safe"),
-	// getOptions
-	require("loader-utils").getOptions
+	require("colors/safe")
 );
