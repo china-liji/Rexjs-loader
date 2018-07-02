@@ -2,7 +2,9 @@ let unhelper = process.argv.indexOf("--unhelper") > -1, path = require("path"), 
 
 require("webpack")(
 	{
-		entry: testPath + "/a.js",
+		entry: [
+			testPath + "/a.js"
+		],
 		output: {
 			path: testPath,
 			filename: unhelper ? "a-unhelper.min.js" : "a.min.js"

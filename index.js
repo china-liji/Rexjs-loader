@@ -1,4 +1,4 @@
-new function(Loader, { File, ECMAScriptParser, Base64, URL, MODULE_CODE_STRING }, fs, path, colors){
+new function(Loader, { File, ECMAScriptParser, Base64, URL, MODULE_CODE_STRING }, fs, path, colors, first){
 
 this.ParserConfig = function(Buffer, ready){
 	return class ParserConfig {
@@ -25,7 +25,7 @@ this.ParserConfig = function(Buffer, ready){
 	false
 );
 
-this.Loader = Loader = function(ParserConfig, url, first, pathList){
+this.Loader = Loader = function(ParserConfig, url, pathList){
 	return class Loader {
 		/**
 		 * Rexjs 于 webpack 中使用的加载器
@@ -33,7 +33,7 @@ this.Loader = Loader = function(ParserConfig, url, first, pathList){
 		 * @param {WebpackLoader} webpackLoader - webpack loader 对象
 		 */
 		constructor(source, webpackLoader){
-			let resultList = [], { resourcePath } = webpackLoader, { root, unhelper } = webpackLoader.query || {};
+			let resultList = [], { resourcePath, data: { first } } = webpackLoader, { root, unhelper } = webpackLoader.query || {};
 
 			// 如果不需要附带 rex-browser-helper.min.js 文件
 			if(unhelper){
@@ -152,8 +152,6 @@ this.Loader = Loader = function(ParserConfig, url, first, pathList){
 	this.ParserConfig,
 	// url
 	require("url"),
-	// first
-	true,
 	// pathList
 	[]
 );
@@ -194,6 +192,11 @@ module.exports.getRule = function(options){
 	};
 };
 
+module.exports.pitch = function(remainingRequest, precedingRequest, data){
+	data.first = first;
+	first = false;
+};
+
 }(
 	// Loader
 	null,
@@ -204,5 +207,7 @@ module.exports.getRule = function(options){
 	// path
 	require("path"),
 	// colors
-	require("colors/safe")
+	require("colors/safe"),
+	// first
+	true
 );
