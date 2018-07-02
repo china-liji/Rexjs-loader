@@ -25,7 +25,7 @@ this.ParserConfig = function(Buffer, ready){
 	false
 );
 
-this.Loader = Loader = function(ParserConfig, url, first){
+this.Loader = Loader = function(ParserConfig, url, first, pathList){
 	return class Loader {
 		/**
 		 * Rexjs 于 webpack 中使用的加载器
@@ -33,7 +33,7 @@ this.Loader = Loader = function(ParserConfig, url, first){
 		 * @param {WebpackLoader} webpackLoader - webpack loader 对象
 		 */
 		constructor(source, webpackLoader){
-			var resultList = [], resourcePath = webpackLoader.resourcePath, { root, unhelper } = webpackLoader.query || {};
+			let resultList = [], resourcePath = webpackLoader.resourcePath, { root, unhelper } = webpackLoader.query || {};
 
 			// 如果不需要附带 rex-browser-helper.min.js 文件
 			if(unhelper){
@@ -48,7 +48,7 @@ this.Loader = Loader = function(ParserConfig, url, first){
 				// 添加 rex-browser-helper.min.js 文件
 				resultList.unshift(
 					fs.readFileSync(
-						require.resolve("rexjs-api/dist/rex-browser-helper.bundle.js"),
+						require.resolve("rexjs-api/dist/rex-browser-helper.min.js"),
 						"utf8"
 					)
 					// 替换 module.exports 部分，防止 webpack 打包增加 module 模块
@@ -74,7 +74,17 @@ this.Loader = Loader = function(ParserConfig, url, first){
 		 * @param {Boolean} unhelper - 是否不需要合并 rex-browser-helper.min.js 文件
 		 */
 		static parse(resultList, resourcePath, source, root, unhelper){
-			var parser = new ECMAScriptParser();
+			let parser = new ECMAScriptParser();
+
+			if(pathList.indexOf(resourcePath) > -1){
+				return;
+			}
+
+			pathList.push(resourcePath);
+
+			console.log(
+				`${colors.yellow("现在打包")}：${colors.green(resourcePath)}`
+			);
 
 			// 如果不是 js 文件
 			if(path.parse(resourcePath).ext !== ".js"){
@@ -102,7 +112,18 @@ this.Loader = Loader = function(ParserConfig, url, first){
 
 			// 遍历依赖
 			parser.deps.forEach((dep) => {
-				var rpath = url.resolve(resourcePath, dep);
+				let rpath, u = new URL(
+					url.resolve(resourcePath, dep)
+				);
+
+				// 如果文件名不存在
+				if(u.filename === ""){
+					let pathname = u.pathname;
+
+					u = new URL(u.origin + (pathname ? pathname : "/index") + ".js" + u.search + u.hash);
+				}
+
+				rpath = u.href;
 
 				// 添加依赖解析结果
 				resultList.push(
@@ -128,7 +149,9 @@ this.Loader = Loader = function(ParserConfig, url, first){
 	// url
 	require("url"),
 	// first
-	true
+	true,
+	// pathList
+	[]
 );
 
 module.exports = function(source){
