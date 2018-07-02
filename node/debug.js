@@ -8,16 +8,12 @@ require("webpack")(
 			filename: unhelper ? "a-unhelper.min.js" : "a.min.js"
 		},
 		module: {
-			rules: [{
-				test: /\.js?$/,
-				use: {
-					loader: path.resolve(__dirname, "../index.js"),
-					options: {
-						root: testPath,
-						unhelper
-					}
+			rules: [
+				require("../index").getRule({
+					root: testPath,
+					unhelper
 				}
-			}]
+			)]
 		}
 	},
 	(err, stats) => {

@@ -31,22 +31,26 @@ module.exports = {
 		filename: "a.min.js"
 	},
 	module: {
+		// 方式1：loaders
 		loaders: [
-			{
-				test: /\.js$/,
-				loader: "rexjs-loader",
-				options: {
-					// 可指定模块的根目录，即 import "/xx.js" 相对的根目录
-					root: __dirname,
-					/*
-					 * 是否不需要合并 rex-browser-helper.min.js 文件，
-					 * 一般使用于 rexjs 解析 es6 的环境中，
-					 * 因为 rex.min.js 已经包括了 rex-browser-helper.min.js 文件。
-					 */
-					unhelper: false
-				}
+			require("rexjs-loader").getConfig({
+				// 可指定模块的根目录，即 import "/xx.js" 相对的根目录
+				root: __dirname,
+				/*
+					* 是否不需要合并 rex-browser-helper.min.js 文件，
+					* 一般使用于 rexjs 解析 es6 的环境中，
+					* 因为 rex.min.js 已经包括了 rex-browser-helper.min.js 文件。
+					*/
+				unhelper: false
+			})
+		],
+		// 方式2：rules
+		rules: [
+			require("rexjs-loader").getRule({
+				root: __dirname,
+				unhelper: false
 			}
-		]
+		)]
 	}
 };
 ```

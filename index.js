@@ -33,20 +33,21 @@ this.Loader = Loader = function(ParserConfig, url, first, pathList){
 		 * @param {WebpackLoader} webpackLoader - webpack loader 对象
 		 */
 		constructor(source, webpackLoader){
-			let resultList = [], resourcePath = webpackLoader.resourcePath, { root, unhelper } = webpackLoader.query || {};
+			let resultList = [], { resourcePath } = webpackLoader, { root, unhelper } = webpackLoader.query || {};
 
 			// 如果不需要附带 rex-browser-helper.min.js 文件
 			if(unhelper){
 				first = false;
 			}
 
-			// 解析文件
-			Loader.parse(resultList, resourcePath, source, root, unhelper)
-
 			// 如果是首次加载模块
 			if(first){
+				console.log(
+					`${colors.yellow("现在打包")}：${colors.green("rexjs-api/dist/rex-browser-helper.min.js")}`
+				);
+
 				// 添加 rex-browser-helper.min.js 文件
-				resultList.unshift(
+				resultList.push(
 					fs.readFileSync(
 						require.resolve("rexjs-api/dist/rex-browser-helper.min.js"),
 						"utf8"
@@ -60,6 +61,9 @@ this.Loader = Loader = function(ParserConfig, url, first, pathList){
 
 				first = false;
 			}
+
+			// 解析文件
+			Loader.parse(resultList, resourcePath, source, root, unhelper);
 
 			// 设置结果
 			this.result = resultList.join("\n");
@@ -168,6 +172,26 @@ module.exports = function(source){
 
 		this.async();
 	}
+};
+
+module.exports.getConfig = function(options){
+	return {
+		test: /\.js$/,
+		loader: __filename,
+		exclude: /node_modules/,
+		options
+	};
+};
+
+module.exports.getRule = function(options){
+	return {
+		test: /\.js?$/,
+		exclude: /node_modules/,
+		use: {
+			loader: __filename,
+			options
+		}
+	};
 };
 
 }(
