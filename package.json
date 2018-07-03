@@ -1,6 +1,6 @@
 {
 	"name": "rexjs-loader",
-	"version": "1.2.5",
+	"version": "1.2.7",
 	"description": "Rexjs-loader - 是 webpack 利用 Rexjs 打包 es6 语法时，所依赖的 loader",
 	"main": "./index.js",
 	"scripts": {

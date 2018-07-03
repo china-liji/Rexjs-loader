@@ -1,4 +1,4 @@
-new function(Loader, { File, ECMAScriptParser, Base64, URL, MODULE_CODE_STRING }, fs, path, colors, first){
+new function(Loader, { File, ECMAScriptParser, Base64, URL }, fs, path, colors, first){
 
 this.ParserConfig = function(Buffer, ready){
 	return class ParserConfig {
@@ -52,11 +52,6 @@ this.Loader = Loader = function(ParserConfig, url, pathList){
 						require.resolve("rexjs-api/dist/rex-browser-helper.min.js"),
 						"utf8"
 					)
-					// 替换 module.exports 部分，防止 webpack 打包增加 module 模块
-					.replace(
-						MODULE_CODE_STRING,
-						"({})"
-					)
 				);
 
 				first = false;
@@ -95,7 +90,12 @@ this.Loader = Loader = function(ParserConfig, url, pathList){
 				// 添加模块初始化代码
 				resultList.push(
 					`new Rexjs.Module("${
-						path.relative(root || "", resourcePath)}","${source.replace(/("|\n|\\)/g, "\\$1")
+						new URL(
+							path.relative(root || "", resourcePath)
+						)
+						.href
+					}","${
+						source.replace(/("|\n|\\)/g, "\\$1")
 					}");`
 				);
 				return;
